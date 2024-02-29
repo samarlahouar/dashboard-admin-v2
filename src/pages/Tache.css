@@ -1,0 +1,39 @@
+/* Import Google Fonts */
+@import url("//fonts.googleapis.com/css2?family=Merriweather+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap");
+
+/* Mui table cell root */
+.MuiTableHead-root .MuiTableCell-root{
+ background-color:#bae1ff;
+ color:#000000;
+ font-size:17px;
+}
+
+/* Mui icon root */
+.App .MuiCard-root .MuiSvgIcon-root{
+ color:#13131a;
+ background-color:#bae1ff;
+}
+
+/* Mui typography root */
+.App .makeStyles-pageTitle-14 .MuiTypography-root{
+ font-weight:600;
+ font-family:'Merriweather Sans', sans-serif;
+}
+
+/* Mui icon root */
+.MuiButton-label .MuiButton-startIcon .MuiSvgIcon-root{
+ background-color:#bae1ff;
+}
+
+/* Make styles new button 3 */
+.ant-layout-content .MuiPaper-root .makeStyles-newButton-3{
+ background-color:#bae1ff;
+ color:#000000;
+}
+
+/* Span Tag */
+.MuiTableHead-root .MuiTableCell-root span{
+ font-size:17px;
+ color:#0b0b0d;
+}
+

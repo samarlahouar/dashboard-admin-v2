@@ -1,0 +1,9 @@
+sider-primary .ant-layout-sider-children div{
+    text-align:center;
+    font-size:27px;
+    font-family:Georgia,Times,'Times New Roman',serif;
+    letter-spacing:1.2px;
+    display:inline-block !important;
+    transform:translatex(54px) translatey(6px);
+    background-color: #0a0b10;
+   }

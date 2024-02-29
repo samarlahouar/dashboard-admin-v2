@@ -1,0 +1,64 @@
+/* Mui table cell root */
+#root .App .layout-dashboard .ant-layout .ant-layout-content .MuiPaper-root .MuiTable-root .MuiTableHead-root .MuiTableRow-root .MuiTableCell-root{
+    height:36px !important;
+    width:300px !important;
+   }
+   
+  
+   
+   /* Mui paper root */
+   .App .ant-layout .ant-layout-content > .MuiPaper-root{
+    transform:translatex(29px) translatey(28px);
+   }
+   
+ 
+   
+   /* Mui toolbar regular */
+   .ant-layout-content .MuiPaper-root .MuiToolbar-regular{
+    height:136px;
+   }
+   /* Input */
+.MuiFormControl-root .MuiOutlinedInput-adornedStart input[type=text]{
+    width:600px;
+   }
+   
+   /* Division */
+   .ant-layout-content .MuiPaper-root .MuiOutlinedInput-adornedStart{
+    left:8px;
+   }
+   
+   /* Mui toolbar regular */
+   .ant-layout-content .MuiPaper-root .MuiToolbar-regular{
+    left:14px;
+   
+   }
+   .ant-layout-content .MuiPaper-root .MuiButton-outlinedPrimary{
+    left:272px;
+   }
+   
+   
+   .MuiFormControl-root .MuiOutlinedInput-adornedStart input[type=text]{
+    width:830px;
+   }
+   
+   /* Make styles page header 3 */
+.ant-layout-content .MuiPaper-root .makeStyles-pageHeader-3{
+    transform:translatex(38px) translatey(6px);
+   }
+   
+  
+   
+   /* Span Tag */
+.MuiTableHead-root .MuiTableCell-root span{
+    left:136px !important;
+   }
+   /* Make styles new button 3 */
+.ant-layout-content .MuiPaper-root .makeStyles-newButton-3{
+    left:900px  !important;
+    background-color: #ffff;
+   }
+   
+   
+   
+   
+   

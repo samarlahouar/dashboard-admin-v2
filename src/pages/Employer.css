@@ -1,0 +1,56 @@
+/* Mui paper root */
+.App .ant-layout .ant-layout-content > .MuiPaper-root {
+    margin-right: 0px;
+    position: relative;
+    left: -48px;
+    width: 1234px;
+}
+
+/* Make styles page header 12 */
+.ant-layout-content .MuiPaper-root .makeStyles-pageHeader-12 {
+    position: relative;
+    left: 63px;
+}
+
+.ant-layout-content .MuiPaper-root .MuiButton-outlinedPrimary {
+    left: 77px;
+}
+
+/* Styles pour la section d'en-tête */
+.header {
+    position: relative;
+    width: 100%;
+    background-color: #fff; /* Ajustez selon vos besoins */
+    z-index: 1000; /* Assurez-vous que l'en-tête apparaît au-dessus des autres contenus */
+    /* Ajoutez d'autres propriétés de style pour l'en-tête si nécessaire */
+}
+
+/* Styles pour la section du tableau */
+.table-section {
+    margin-top: 70px;
+    overflow-x: auto; /* Active le défilement horizontal à l'intérieur du conteneur */
+    overflow-y: auto; /* Active le défilement vertical si le contenu dépasse la hauteur */
+    max-height: 500px; /* Hauteur maximale du conteneur de tableau pour activer le défilement vertical */
+   /* width:1355px;*/
+}
+
+
+
+
+.table-wrapper {
+    overflow-x: auto; /* Active le défilement horizontal si le contenu dépasse la largeur */
+    overflow-y: auto; /* Active le défilement vertical si le contenu dépasse la hauteur */
+    max-height: 500px; /* Hauteur maximale du conteneur de tableau pour activer le défilement vertical */
+    
+ overflow:scroll;
+
+}
+.table-container {
+    width: 100%; /* Assurez-vous que le conteneur parent a une largeur suffisante */
+    overflow-x: auto; /* Activer le défilement horizontal si nécessaire */
+}
+
+.table {
+    width: 1509px; /* Largeur fixe du tableau */
+    table-layout: fixed; /* Empêcher la table de redimensionner automatiquement */
+}
