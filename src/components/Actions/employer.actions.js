@@ -65,13 +65,12 @@ export const deleteEmployerAction = (id) => {
 
 
 
-
-  export const editEmployerAction = (data,id) => {
+  export const editEmployerAction = (id, data) => {
     return async (dispatch) => {
       dispatch({ type: EmployerConstants.EDIT_EMPLOYER_REQUEST });
   
       try {
-        const res = await axios.post(`http://localhost:3000/Employer/${id}/modifier` ,data);
+        const res = await axios.post(`http://localhost:3000/Employer/${id}/modifier`, data);
         if (res.status === 200) {
           dispatch({
             type: EmployerConstants.EDIT_EMPLOYER_SUCCESS,

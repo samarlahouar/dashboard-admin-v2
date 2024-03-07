@@ -13,10 +13,7 @@
    
  
    
-   /* Mui toolbar regular */
-   .ant-layout-content .MuiPaper-root .MuiToolbar-regular{
-    height:136px;
-   }
+   
    /* Input */
 .MuiFormControl-root .MuiOutlinedInput-adornedStart input[type=text]{
     width:600px;
@@ -27,11 +24,7 @@
     left:8px;
    }
    
-   /* Mui toolbar regular */
-   .ant-layout-content .MuiPaper-root .MuiToolbar-regular{
-    left:14px;
    
-   }
    .ant-layout-content .MuiPaper-root .MuiButton-outlinedPrimary{
     left:272px;
    }

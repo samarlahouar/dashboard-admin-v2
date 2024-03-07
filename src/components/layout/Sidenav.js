@@ -203,7 +203,7 @@ function Sidenav({ color }) {
             >
               {Employer}
             </span>
-            <span className="label">Employer</span>
+            <span className="label">Employé</span>
           </NavLink>
         </Menu.Item>
         <Menu.Item key="2">
@@ -216,7 +216,7 @@ function Sidenav({ color }) {
             >
               {Tache}
             </span>
-            <span className="label">Tache</span>
+            <span className="label"> Tâche</span>
           </NavLink>
         </Menu.Item>
         <Menu.Item key="3">
@@ -243,7 +243,7 @@ function Sidenav({ color }) {
             >
               {projet}
             </span>
-            <span className="label">projet</span>
+            <span className="label">Projet</span>
           </NavLink>
         </Menu.Item>
         <Menu.Item className="menu-item-header" key="5">

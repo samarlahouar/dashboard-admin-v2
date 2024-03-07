@@ -65,5 +65,9 @@
 .MuiTableHead-root .MuiTableCell-root span{
     left:7px !important;
    }
+   #root>div:nth-child(1)>section:nth-child(1)>section:nth-child(2)>main:nth-child(2)>div:nth-child(2) {
+    width : 1238px;
+    max-width : 1238px;
+    }
    
    

@@ -47,10 +47,41 @@
 }
 .table-container {
     width: 100%; /* Assurez-vous que le conteneur parent a une largeur suffisante */
-    overflow-x: auto; /* Activer le défilement horizontal si nécessaire */
+    overflow-x: none; /* Activer le défilement horizontal si nécessaire */
 }
 
 .table {
     width: 1509px; /* Largeur fixe du tableau */
     table-layout: fixed; /* Empêcher la table de redimensionner automatiquement */
 }
+/* Mui paper root */
+.App .table-section .MuiPaper-root{
+    
+    width:1543px;
+   }
+   
+   /* Table section */
+.App .table-section{
+    transform:translatex(0px) translatey(0px);
+   }
+   
+   /* Mui paper root */
+   .App .table-section .MuiPaper-root{
+    position:relative;
+    top:-52px;
+    left:-44px;
+   }
+   
+/* Table section */
+.App .table-section{
+ transform:translatex(0px) translatey(0px);
+}
+
+/* Mui paper root */
+.App .table-section .MuiPaper-root{
+ position:relative;
+ top:-52px;
+ left:-44px;
+}
+
+   
