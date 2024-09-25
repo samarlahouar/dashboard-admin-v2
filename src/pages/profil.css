@@ -1,0 +1,18 @@
+
+  #root > div:nth-child(1) > section:nth-child(1) > section:nth-child(2) > main:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > input:nth-child(2) {
+    margin-bottom : 14px;
+    }
+    #root > div:nth-child(1) > section:nth-child(1) > section:nth-child(2) > main:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > input:nth-child(4) {
+    margin-bottom : 14px;
+    }
+    #root > div:nth-child(1) > section:nth-child(1) > section:nth-child(2) > main:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > input:nth-child(1) {
+    margin-bottom : 14px;
+    }
+
+    #root > div:nth-child(1) > section:nth-child(1) > section:nth-child(2) > main:nth-child(2) > div:nth-child(3) > div:nth-child(1) {
+      margin-left : 368px;
+      height : 599px;
+      max-height : 599px;
+      width : 434px;
+      max-width : 434px;
+      }

@@ -1,40 +1,62 @@
+import React from 'react';
+import { PieChart, Pie, Legend, Tooltip, Cell } from 'recharts';
+import { useSelector } from 'react-redux';
+import './configs/lin.css';
 
+export default function CustomPieChart() {
+  const conger = useSelector(state => state.conger.conger.Congélist || state.conger.conger);
+  const compte = useSelector(state => state.demandedecompte.compte.Comptelist || []);
+  const departement = useSelector(state => state.departement.departement.departementlist || []);
+  const employer = useSelector(
+    (state) => state.employer.employer.Employerlist || state.employer.employer
+  ).map((employee) => ({
+    ...employee,
+    id: employee._id // Utilisez la propriété _id comme identifiant unique
+  }));
+  const reunion = useSelector(state => state.reunion.reunion.Reunionlist || state.reunion.reunion);
 
-import ReactApexChart from "react-apexcharts";
-import { Typography } from "antd";
-import { MinusOutlined } from "@ant-design/icons";
-import lineChart from "./configs/lineChart";
+  // Calculer le nombre d'éléments dans chaque catégorie
+  const departmentCount = departement.length;
+  const congerCount = conger.length;
+  const compteCount = compte.length;
+  const employeeCount = employer.length;
+  const reunionCount = reunion.length;
 
-function LineChart() {
-  const { Title, Paragraph } = Typography;
+  // Données pour le graphique
+  const data = [
+    { name: 'Départements', value: departmentCount },
+    { name: 'Congés', value: congerCount },
+    { name: 'Demandes de compte', value: compteCount },
+    { name: 'Employés', value: employeeCount },
+    { name: 'Réunions', value: reunionCount },
+  ];
+
+  // Couleurs pour les sections du graphique
+  const colors = ['#8884d8', '#C6E4D9', '#C2BDE0', '#D69AC8', '#96DCF0'];
 
   return (
-    <>
-      <div className="linechart">
-        <div>
-          <Title level={5}>projet à réaliser</Title>
-          <Paragraph className="lastweek">
-            cette année <span className="bnb2">30%</span>
-          </Paragraph>
-        </div>
-        <div className="sales">
-          <ul>
-            <li>{<MinusOutlined />} Projet</li>
-            <li>{<MinusOutlined />} Les taches  </li>
-          </ul>
-        </div>
-      </div>
-
-      <ReactApexChart
-        className="full-width"
-        options={lineChart.options}
-        series={lineChart.series}
-        type="area"
-        height={350}
-        width={"100%"}
-      />
-    </>
+    <PieChart width={400} height={400}>
+      <Pie
+        data={data}
+        dataKey="value"
+        nameKey="name"
+        cx={150}
+        cy={150}
+        innerRadius={30}
+        outerRadius={100}
+        paddingAngle={5}
+        cornerRadius={5}
+        startAngle={-90}
+        endAngle={180}
+        fill="#8884d8"
+        label
+      >
+        {data.map((entry, index) => (
+          <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+        ))}
+      </Pie>
+      <Tooltip />
+      <Legend />
+    </PieChart>
   );
 }
-
-export default LineChart;

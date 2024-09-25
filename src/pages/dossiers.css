@@ -1,0 +1,80 @@
+/* Styles for the input field */
+input[type="text"] {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+  }
+  
+  /* Styles for the table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 0.5rem;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
+  /* Styles for the "Voir PDF" link */
+  a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Styles for the form */
+  form {
+    margin-bottom: 1rem;
+  }
+  
+  input[type="file"] {
+    margin-bottom: 0.5rem;
+  }
+  
+  button {
+    padding: 0.5rem 1rem;
+    margin-right: 0.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  #root > div:nth-child(1) > section:nth-child(1) > section:nth-child(2) > main:nth-child(2) > div:nth-child(1) > form:nth-child(3) > button:nth-child(4) {
+    margin-left : 11px;
+    }
+    #root > div:nth-child(1) > section:nth-child(1) > section:nth-child(2) > main:nth-child(2) > div:nth-child(1) > form:nth-child(3) > input:nth-child(1) {
+    color : rgba(245, 36, 36, 0.65);
+
+    }
+    #root > div:nth-child(1) > section:nth-child(1) > section:nth-child(2) > main:nth-child(2) > div:nth-child(1) > div:nth-child(1) > button:nth-child(2) {
+    margin-bottom : 19px;
+    }
+    #root > div:nth-child(1) > section:nth-child(1) > section:nth-child(2) > main:nth-child(2) > div:nth-child(1) > div:nth-child(2) > table:nth-child(1) > thead:nth-child(1) > tr:nth-child(1) > th:nth-child(1) {
+        color : rgb(255, 255, 255);
+        background-color : rgb(43, 31, 132);
+        border-top-color : rgb(221, 221, 221);
+        border-right-color : rgb(221, 221, 221);
+        border-bottom-color : rgb(221, 221, 221);
+        border-left-color : rgb(221, 221, 221);
+        }
+        #root > div:nth-child(1) > section:nth-child(1) > section:nth-child(2) > main:nth-child(2) > div:nth-child(1) > div:nth-child(2) > table:nth-child(1) > thead:nth-child(1) > tr:nth-child(1) > th:nth-child(2) {
+        color : rgb(255, 255, 255);
+        background-color : rgb(43, 31, 132);
+        }

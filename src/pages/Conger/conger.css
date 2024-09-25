@@ -1,0 +1,22 @@
+.approved {
+    color: green;
+  }
+  
+  .rejected {
+    color: red;
+  }
+  
+  .pending {
+    color: blue;
+  }
+  /* Dans votre fichier de style */
+h2.custom-title {
+    color:#003cff;
+    font-size : 26px;
+
+  }
+
+  .custom-header {
+    background-color: #303f9f; /* Couleur de fond personnalisée pour l'en-tête du tableau */
+    color: white; /* Couleur du texte de l'en-tête du tableau */
+  }

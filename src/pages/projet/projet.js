@@ -14,21 +14,29 @@ import {
   Grid,
   Button as MuiButton,
 } from "@material-ui/core";
-import useTable from "./UseTable";
-import * as employeeService from "./employeeService";
-import Controls from "./controls/Controls";
+import useTable from "../UseTable";
+import * as employeeService from "../Employer/employeeService";
+import Controls from "../controls/Controls";
 import { Search } from "@material-ui/icons";
 import AddIcon from "@material-ui/icons/Add";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import CloseIcon from "@material-ui/icons/Close";
 import PeopleOutlineTwoToneIcon from "@material-ui/icons/PeopleOutlineTwoTone";
-import PageHeader from "./PageHeader";
-import { listerProjet, addProjetAction, deleteProjetAction, editProjetAction } from '../components/Actions/projet.actions';
+import PageHeader from "../PageHeader";
+import { listerProjet, addProjetAction, deleteProjetAction, editProjetAction } from '../../components/Actions/projet.actions';
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import "./projet.css";
 import Swal from 'sweetalert2';
+import { DataGrid } from '@mui/x-data-grid';
+import MultiStepForm from '../projet/MultiStepForm';
+import EditProjetForm from "../projet/EditProjetForm";
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+import WorkOutlineIcon from '@material-ui/icons/WorkOutline';
+
 
 
 
@@ -71,19 +79,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const headCells = [
-  { id: "nomdeprojet", label: "Nom de projet" },
-  { id: "description", label: "Déscription" },
-  { id: "objectif", label: "Objectif" },
-  { id: "periodeestimé", label: "Période estimé" },
-  { id: "type", label: "Type" },
-  { id: "cout ", label: "Cout" },
-  { id: "statutdeprogresion", label: "Statut de progresion" },
-  { id: "lestaches ", label: "Les taches " },
-  { id: "responsable", label: "Résponsable" },
-  { id: " employés", label: " Employés" },
-  { id: "actions", label: "Actions", disableSorting: true },
-];
 
 function Projet() {
   const classes = useStyles();
@@ -105,6 +100,136 @@ function Projet() {
   const [lestaches, setlestaches] = useState("");
   const [responsable, setresponsable] = useState("");
   const [employés, setemployés] = useState("");
+
+  const columns = [
+    { field: 'nomdeprojet', headerName: 'Nom de projet', width: 200 , headerClassName: 'custom-header',},
+    { field: 'responsable', headerName: 'Résponsable', width: 200 , headerClassName: 'custom-header',},
+    {
+      field: 'objectif',
+      headerName: 'Objectif',
+       headerClassName: 'custom-header',
+      width: 200,
+      renderCell: (params) => (
+        <div style={{ whiteSpace: 'pre-line' }}>
+          {params.row.objectif}
+        </div>
+      ),
+    },
+      { field: 'periodeestimé', headerName: 'Période estimé', width: 200 , headerClassName: 'custom-header',},
+    { field: 'type', headerName: 'Type', width: 130 , headerClassName: 'custom-header',},
+    { field: 'cout', headerName: 'Cout', width: 130 , headerClassName: 'custom-header',},
+    {
+      field: 'statutdeprogression',
+      headerName: 'Statut de progression',
+      width: 200,
+      headerClassName: 'custom-header',
+      renderCell: (params) => (
+        <div
+          style={{
+            backgroundColor: getProgressColor(params.row.statutdeprogression),
+            padding: '8px',
+            borderRadius: '4px',
+          }}
+        >
+          {params.row.statutdeprogression}
+        </div>
+      ),
+    },    {
+      field: 'lestaches',
+      headerName: 'Les taches',
+       headerClassName: 'custom-header',
+      width: 400,
+      renderCell: (params) => (
+        <div style={{ whiteSpace: 'pre-line' }}>
+          {params.row.lestaches.split('\n').map((task, index) => (
+            <div key={index}>{task}</div>
+          ))}
+        </div>
+      ),
+    },
+    {
+      field: 'description',
+      headerName: 'Description',
+      width: 400,
+       headerClassName: 'custom-header',
+      renderCell: (params) => (
+        <div style={{ whiteSpace: 'pre-line' }}>
+          {params.row.description.split('\n').map((paragraph, index) => (
+            <p key={index}>{paragraph}</p>
+          ))}
+        </div>
+      ),
+    },  {
+      field: 'employés',
+      headerName: 'Employés',
+      width: 300,
+       headerClassName: 'custom-header',
+      renderCell: (params) => (
+        <div style={{ whiteSpace: 'pre-line' }}>
+          {params.row.employés.split(', ').map((employee, index, array) => (
+            <React.Fragment key={index}>
+              {employee}
+              {index !== array.length - 1 && <br />}
+            </React.Fragment>
+          ))}
+        </div>
+      ),
+    },
+    {
+      field: 'actions',
+      headerName: 'Actions',
+     headerClassName: 'custom-header',
+      width: 210,
+      renderCell: (params) => (
+        <div>
+       <MuiButton
+  color="primary"
+  onClick={() => handleShowEdit(params.row)}
+>
+  <EditOutlinedIcon />
+</MuiButton>
+
+<MuiButton
+  color="secondary"
+  onClick={() => deleteProjet(params.row.id)}
+>
+  <CloseIcon />
+</MuiButton>
+<MuiButton color="primary" onClick={() => handleShowDetails(params.row)}>
+          <VisibilityOutlinedIcon />
+        </MuiButton>
+          
+        </div>
+      ),
+    },
+  ];
+
+  const getProgressColor = (progress) => {
+    const percentage = parseInt(progress); // Ensure progress is an integer
+    if (percentage >= 0 && percentage <= 30) {
+      return 'red'; // For 0-30% completion, set background color to red
+    } else if (percentage >= 40 && percentage <= 90) {
+      return 'lightblue'; // For 40-90% completion, set background color to light blue
+    } else if (percentage === 100) {
+      return 'lightgreen'; // For 100% completion, set background color to light green
+    } else {
+      return 'inherit'; // For other values, use default background color
+    }
+  };
+   // Convertir les données de l'ancien tableau vers le format requis par le nouveau tableau
+   const rows = projet.map((projet) => ({
+    id: projet._id,
+    nomdeprojet: projet.nomdeprojet,
+    description: projet.description,
+    objectif: projet.objectif,
+    periodeestimé: projet.periodeestimé,
+    type: projet.type,
+    cout: projet.cout,
+    statutdeprogression: projet.statutdeprogression,
+    lestaches: projet.lestaches,
+    responsable: projet.responsable,
+    employés: projet.employés,
+  }));
 
   const inputFormElements = [
     {
@@ -332,7 +457,8 @@ const deleteProjet = async (id) => {
           confirmButtonText: 'OK'
       });
   }
-};
+}
+
   const [id,setId]=useState('');
  const editProjet = async () => {
     // Vérifiez que l'ID est défini et non vide
@@ -385,26 +511,7 @@ const deleteProjet = async (id) => {
  
   const [edit, setEdit] = useState(false);
   const handlecloseEdit = () => setEdit(false);
-  const handleShowEdit = (projet) => {
-    console.log("ID de projet:", projet._id); // Vérifier l'ID de l'employé
-
-    setEdit(true); // Ouvrir le dialogue de modification
-    setOpenPopup(false); // Fermer le dialogue d'ajout s'il est ouvert
-    setId(projet._id); // Mettre à jour l'ID de l'employé sélectionné
-    // Remplir le formulaire avec les données de l'employé sélectionné
-    setFormData({
-      nomdeprojet: projet. nomdeprojet,
-      description: projet. description,
-       objectif: projet. objectif,
-       periodeestimé: projet. periodeestimé,
-       type: projet. type,
-      cout: projet.cout,
-      statutdeprogression: projet.statutdeprogression,
-      lestaches: projet.lestaches,
-      responsable: projet.responsable,
-      employés: projet.employés,
-    });
-  };
+  
   const handleFormModifeir = async (e) => {
     e.preventDefault();
     console.log("Formulaire de modification soumis !");
@@ -419,21 +526,54 @@ const deleteProjet = async (id) => {
     setOpenPopup(false); // Fermer le popup après soumission
     handlecloseEdit();
   };
+  const handleShowEdit = (projet) => {
+    // Check if the project object has the expected fields
+    if (projet && (projet._id || projet.id)) {
+        // Use projet._id if available, otherwise use projet.id
+        const projectId = projet._id || projet.id;
+        console.log("ID de projet:", projectId);
+        setOpenEditForm(true);
+        setOpenPopup(false);
+        setSelectedProjet({ ...projet, _id: projectId }); // Ensure _id field is present
+    } else {
+        console.error("Invalid project object or missing _id field:", projet);
+        // Optionally, display an error message to the user
+        // alert("Invalid project data. Please try again.");
+    }
+};
  
   const [recordForEdit, setRecordForEdit] = useState(null);
   const [records, setRecords] = useState(employeeService.getAllEmployees());
   const [filterFn, setFilterFn] = useState({ fn: (items) => items });
   const [openPopup, setOpenPopup] = useState(false);
   const [formData, setFormData] = useState({});
+  const [openEditForm, setOpenEditForm] = useState(false); // État pour contrôler l'ouverture du formulaire d'édition
+const [selectedProjet, setSelectedProjet] = useState(null); // État pour stocker les données de l'employé sélectionné
 
   const { TblContainer, TblHead, TblPagination, recordsAfterPagingAndSorting } =
-    useTable(records, headCells, filterFn);
+    useTable(records, filterFn);
 
     const [searchTerm, setSearchTerm] = useState("");
     const handleSearch = (e) => {
       setSearchTerm(e.target.value);
     };
-
+    const filteredRows = rows.filter((row) =>
+  row.nomdeprojet.toLowerCase().includes(searchTerm.toLowerCase())
+);
+    useEffect(() => {
+      setFilterFn({
+        fn: (items) => {
+          if (searchTerm === "") {
+            return items; // Si aucun terme de recherche, retourner tous les enregistrements
+          } else {
+            // Sinon, filtrer les enregistrements basés sur le terme de recherche
+            return items.filter((item) =>
+              item.nomdeprojet.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+          }
+        },
+      });
+    }, [searchTerm]);
   const handleAddNew = () => {
     setRecordForEdit(null);
     setOpenPopup(true);
@@ -455,26 +595,66 @@ const deleteProjet = async (id) => {
     }
   };
 
+
+  
+  // Fonction pour afficher les détails de l'employé dans un popup
+const handleShowDetails = (projetData) => {
+  setShowDetails(true);
+  setSelectedProjet(projetData);
+};
+// Déclaration de l'état pour contrôler l'affichage du popup et stocker les données de l'employé sélectionné
+const [showDetails, setShowDetails] = useState(false);
+
+const ProjetDetailsPopup = ({ open, handleClose, projet }) => {
+  return (
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle>projet Details</DialogTitle>
+      <DialogContent>
+        {/* Vérifier si employee est défini avant d'afficher les détails */}
+        {projet && (
+          <>
+            <div>Nom de projet: {projet.nomdeprojet}</div>
+            <div>responsable: {projet.responsable}</div>
+            <div>objectif: {projet.objectif}</div>
+            <div>periodeestimé: {projet.periodeestimé}</div>
+          <div>type: {projet.type}</div>
+          <div>cout: {projet.cout}</div>
+          <div>statutdeprogression: {projet.statutdeprogression}</div>
+          <div>les taches: {projet.lestaches}</div>
+          <div>description: {projet.description}</div>
+          <div>employés: {projet.employés}</div>
+
+                   </>
+        )}
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose}>Fermer</Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
   return (
     <>
       <PageHeader
         title=" Liste des Projets"
-        icon={<PeopleOutlineTwoToneIcon fontSize="large" />}
-      />
+        icon={<WorkOutlineIcon fontSize="large" />}
+        />
       <Paper className={classes.pageContent}>
         <Toolbar>
-          <Controls.Input
-            label="Recherche Projet"
-            className={classes.searchInput}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Search />
-                </InputAdornment>
-              ),
-            }}
-            onChange={handleSearch}
-          />
+        <Controls.Input
+  label="Recherche Projet"
+  className={classes.searchInput}
+  InputProps={{
+    startAdornment: (
+      <InputAdornment position="start">
+        <Search />
+      </InputAdornment>
+    ),
+  }}
+  value={searchTerm} // Ajoutez cet attribut pour refléter l'état du terme de recherche
+  onChange={handleSearch}
+/>
           <Controls.Button
             text="Ajouter"
             variant="outlined"
@@ -483,142 +663,36 @@ const deleteProjet = async (id) => {
             onClick={handleAddNew}
           />
         </Toolbar>
+        <MultiStepForm
+            open={openPopup} // Passez l'état pour ouvrir/fermer le formulaire à plusieurs étapes
+            setOpen={setOpenPopup} // Fonction pour modifier l'état d'ouverture/fermeture du formulaire à plusieurs étapes
+          />
 
-        <TblContainer>
-          <TblHead />
-          <TableBody>
-  {projet.map((projet) => {
-    if (projet.nomdeprojet.toLowerCase().includes(searchTerm.toLowerCase())) {
-      return (
-        <TableRow key={projet.id}>
-          <TableCell>{projet.nomdeprojet}</TableCell>
-          <TableCell>{projet.description}</TableCell>
-          <TableCell>{projet.objectif}</TableCell>
-          <TableCell>{projet.periodeestimé}</TableCell>
-          <TableCell>{projet.type}</TableCell>
-          <TableCell>{projet.cout}</TableCell>
-          <TableCell>{projet.statutdeprogression}</TableCell>
-          <TableCell>{projet.lestaches}</TableCell>
-          <TableCell>{projet.responsable}</TableCell>
-          <TableCell>{projet.employés}</TableCell>
-          <TableCell>
-            <ActionButton
-              color="primary"
-              onClick={() => handleShowEdit(projet)}
-            >
-              <EditOutlinedIcon fontSize="small" />
-            </ActionButton>{" "}
-            <ActionButton
-              color="secondary"
-              onClick={() => deleteProjet(projet._id)}
-            >
-              <CloseIcon fontSize="small" />
-            </ActionButton>
-          </TableCell>
-        </TableRow>
-      );
-    } else {
-      return null;
-    }
-  })}
-</TableBody>
-        </TblContainer>
-        <TblPagination />
-      </Paper>
-         {/* Popup pour ajouter */}
-      <Dialog
-        open={openPopup}
-        maxWidth="md"
-        classes={{ paper: classes.dialogWrapper }}
-      >
-        <DialogTitle className={classes.dialogTitle}>
-          <div style={{ display: "flex" }}>
-            <Typography variant="h6" component="div" style={{ flexGrow: 1 }}>
-              Ajouter un Projet 
-            </Typography>
-            <ActionButton color="secondary" onClick={() => setOpenPopup(false)}>
-              <CloseIcon />{" "}
-            </ActionButton>
-          </div>
-        </DialogTitle>
-        <DialogContent dividers>
-        
-        <form onSubmit={e => { e.preventDefault(); addProjet(); }}>
-            <Grid container>
-              {inputFormElements.map((item, index) => (
-                <Grid item xs={item.xs} sm={item.sm} key={index}>
-                  <Controls.Input
-                    name={item.name}
-                    label={item.label}
-                    placeholder={item.placeholder}
-                    variant={item.variant}
-                    fullWidth={item.fullWidth}
-                    required={item.required}
-                    value={formData[item.name] || ""}
-                    onChange={(e) =>
-                      setFormData({ ...formData, [item.name]: e.target.value })
-                    }
-                  />
-                </Grid>
-              ))}
-            </Grid>
-            <div>
-              <Controls.Button type="submit" text="Submit" />
-              <Controls.Button
-                text="Reset"
-                color="default"
-                onClick={() => setFormData({})}
-              />
-            </div>
-          </form>
-        </DialogContent>
-      </Dialog>
-       {/* Popup pour modifier */}
-       <Dialog open={edit} onClose={handlecloseEdit} maxWidth="md">
-  <DialogTitle>
-    <div style={{ display: "flex" }}>
-      <Typography variant="h6" style={{ flexGrow: 1 }}>
-        Projet à Modifier
-      </Typography>
-      <ActionButton color="secondary" onClick={handlecloseEdit}>
-        <CloseIcon />
-      </ActionButton>
+        <div style={{ height: 400, width: '100%' }}>
+        <DataGrid
+  rows={filteredRows}
+  columns={columns}
+  pageSize={5}
+  checkboxSelection
+/>
     </div>
-  </DialogTitle>
-  <DialogContent dividers>
-    <form onSubmit={handleFormModifeir}>
-      <Grid container spacing={3}>
-        {inputFormElements.map((item, index) => (
-          <Grid item xs={12} sm={6} key={index}>
-            <Controls.Input
-              label={item.label}
-              name={item.name}
-              value={formData[item.name] || ""}
-              onChange={(e) =>
-                setFormData({ ...formData, [item.name]: e.target.value })
-              }
-              fullWidth
-            />
-          </Grid>
-        ))}
-        <Grid item xs={12}>
-          <div>
-            <Controls.Button type="submit" text="Submit" />
-            <Controls.Button
-              text="Reset"
-              color="default"
-              onClick={() => {
-                setEdit(false); // Fermer le popup de modification
-                handlecloseEdit(); // Fermer le popup
-                setFormData({}); // Réinitialiser les données du formulaire
-              }}
-            />
-          </div>
-        </Grid>
-      </Grid>
-    </form>
-  </DialogContent>
-</Dialog>
+
+    {/* Ajoutez le composant EmployeeDetailsPopup ici */}
+<ProjetDetailsPopup 
+  open={showDetails} 
+  handleClose={() => setShowDetails(false)} 
+  projet={selectedProjet} 
+/>
+        
+      </Paper>
+      {openEditForm && (
+    <EditProjetForm
+        open={openEditForm}
+        setOpen={setOpenEditForm}
+        ProjetData={selectedProjet} // Passer les données du projet sélectionné comme prop
+    />
+)}
+        
     </>
   );
 }

@@ -29,22 +29,20 @@
 .table-section {
     margin-top: 70px;
     overflow-x: auto; /* Active le défilement horizontal à l'intérieur du conteneur */
-    overflow-y: auto; /* Active le défilement vertical si le contenu dépasse la hauteur */
+     /* Active le défilement vertical si le contenu dépasse la hauteur */
     max-height: 500px; /* Hauteur maximale du conteneur de tableau pour activer le défilement vertical */
    /* width:1355px;*/
 }
 
 
-
-
-.table-wrapper {
-    overflow-x: auto; /* Active le défilement horizontal si le contenu dépasse la largeur */
-    overflow-y: auto; /* Active le défilement vertical si le contenu dépasse la hauteur */
-    max-height: 500px; /* Hauteur maximale du conteneur de tableau pour activer le défilement vertical */
-    
- overflow:scroll;
-
-}
+#root>div:nth-child(1)>section:nth-child(1)>section:nth-child(2)>main:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2) {
+    width : 912px;
+    max-width : 912px;
+    }
+    #root>div:nth-child(1)>section:nth-child(1)>section:nth-child(2)>main:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>button:nth-child(2) {
+      
+        margin-left : 73px !important;
+        }
 .table-container {
     width: 100%; /* Assurez-vous que le conteneur parent a une largeur suffisante */
     overflow-x: none; /* Activer le défilement horizontal si nécessaire */
@@ -74,14 +72,28 @@
    
 /* Table section */
 .App .table-section{
- transform:translatex(0px) translatey(0px);
+ transform:translatex(0px) translatey(0px) !important;
 }
 
 /* Mui paper root */
 .App .table-section .MuiPaper-root{
- position:relative;
- top:-52px;
- left:-44px;
+ position:relative !important ;
+ top:-52px !important;
+ left:-44px !important;
 }
 
-   
+.custom-header {
+    background-color: #303f9f; /* Couleur de fond personnalisée pour l'en-tête du tableau */
+    color: white; /* Couleur du texte de l'en-tête du tableau */
+  } 
+  #root > div:nth-child(1) > section:nth-child(1) > section:nth-child(2) > main:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > input:nth-child(2) {
+    margin-left : -45px;
+    margin-bottom : 0px;
+    width : 893px;
+    max-width : 893px;
+    }
+
+
+    #root > div:nth-child(1) > section:nth-child(1) > section:nth-child(2) > main:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) {
+        color : rgb(0, 0, 0);
+        }

@@ -1,57 +1,48 @@
-
-
-import ReactApexChart from "react-apexcharts";
-import { Row, Col, Typography } from "antd";
-import eChart from "./configs/eChart";
+import React, { useEffect, useState } from "react";
+import { Typography, Grid, Paper } from "@mui/material";
+import { useSelector } from "react-redux";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
 function EChart() {
   const { Title, Paragraph } = Typography;
+  const projetList = useSelector(state => state.projet.projet.projetlist || state.projet.projet);
 
-  const items = [
-    {
-      Title: "3,6K",
-      user: "Employées",
-    },
-    {
-      Title: "30",
-      user: "Projets",
-    },
-    {
-      Title: "5",
-      user: "Département",
-    },
-   
-  ];
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    // Vérifier que projetList est défini et non vide
+    if (projetList && projetList.length > 0) {
+      // Créer un tableau de données pour le graphique à barres
+      const newData = projetList.map(projet => ({
+        nomdeprojet: projet.nomdeprojet,
+        statutdeprogression: projet.statutdeprogression,
+        pourcentage: parseInt(projet.statutdeprogression.replace("%", ""))
+      }));
+      setData(newData);
+    }
+  }, [projetList]);
 
   return (
-    <>
-      <div id="chart">
-        <ReactApexChart
-          className="bar-chart"
-          options={eChart.options}
-          series={eChart.series}
-          type="bar"
-          height={220}
-        />
-      </div>
-      <div className="chart-vistior">
-        <Title level={5}>Projet actif</Title>
-        <Paragraph className="lastweek">
-          puis la semaine derniére <span className="bnb2">+30%</span>
-        </Paragraph>
+    
+    <Grid container spacing={2}>
+       <Grid item xs={12}>
+        <Typography variant="h5" gutterBottom>Projet actif</Typography>
         
-        <Row gutter>
-          {items.map((v, index) => (
-            <Col xs={6} xl={6} sm={6} md={6} key={index}>
-              <div className="chart-visitor-count">
-                <Title level={4}>{v.Title}</Title>
-                <span>{v.user}</span>
-              </div>
-            </Col>
-          ))}
-        </Row>
-      </div>
-    </>
+      </Grid>
+      <Grid item xs={12}>
+        <Paper>
+          <ResponsiveContainer width="100%" height={data.length * 40}>
+            <BarChart data={data} layout="vertical">
+              <XAxis type="number" />
+              <YAxis dataKey="nomdeprojet" type="category" width={100} />
+              <Tooltip />
+              <Bar dataKey="pourcentage" fill="#2b1f84" barSize={30} />
+            </BarChart>
+          </ResponsiveContainer>
+        </Paper>
+      </Grid>
+     
+    </Grid>
   );
 }
 

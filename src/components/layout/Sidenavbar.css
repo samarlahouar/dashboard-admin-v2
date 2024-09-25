@@ -7,3 +7,13 @@ sider-primary .ant-layout-sider-children div{
     transform:translatex(54px) translatey(6px);
     background-color: #0a0b10;
    }
+   .text-color {
+    color: #2b1f84;
+
+  }
+
+  #root>div:nth-child(1)>section:nth-child(1)>aside:nth-child(1)>div:nth-child(1)>div:nth-child(1)>span:nth-child(2) {
+    margin-left : 50px;
+    font-size : 16px;
+    }
+  

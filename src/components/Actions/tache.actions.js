@@ -43,24 +43,24 @@ export const addTacheAction = (data) => {
 };
 
 export const deleteTacheAction = (id) => {
-    return async (dispatch) => {
-      dispatch({ type: TacheConstants.DELETE_TASKS_REQUEST });
+  return async (dispatch) => {
       try {
-        const res = await axios.get(`http://localhost:3000/tache/${id}/supprimer`);
-        if (res.status === 200) {
-          dispatch({
-            type: TacheConstants.DELETE_TASKS_SUCCESS,
-            payload: { message: res.data },
-          });
-        }
+          // Utiliser l'ID pour supprimer la tâche dans la base de données
+          const res = await axios.get(`http://localhost:3000/tache/${id}/supprimer`);
+          if (res.status === 200) {
+              dispatch({
+                  type: TacheConstants.DELETE_TASKS_SUCCESS,
+                  payload: { message: res.data },
+              });
+          }
       } catch (error) {
-        dispatch({
-          type: TacheConstants.DELETE_TASKS_FAILURE,
-          payload: { error: error.response },
-        });
+          dispatch({
+              type: TacheConstants.DELETE_TASKS_FAILURE,
+              payload: { error: error.response },
+          });
       }
-    };
   };
+};
   
 
 

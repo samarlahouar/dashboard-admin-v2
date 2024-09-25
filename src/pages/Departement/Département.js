@@ -5,15 +5,23 @@ import AddIcon from '@material-ui/icons/Add';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import CloseIcon from '@material-ui/icons/Close';
 import PeopleOutlineTwoToneIcon from '@material-ui/icons/PeopleOutlineTwoTone';
-import PageHeader from "../pages/PageHeader";
-import Controls from "./controls/Controls";
-import useTable from './UseTable';
-import * as employeeService from '../pages/employeeService';
-import { listerDepartement, addDepartementAction, deleteDepartementAction, editDepartementAction } from '../components/Actions/departement.actions';
+import PageHeader from "../PageHeader";
+import Controls from "../controls/Controls";
+import useTable from '../UseTable';
+import * as employeeService from '../Employer/employeeService';
+import { listerDepartement, addDepartementAction, deleteDepartementAction, editDepartementAction } from '../../components/Actions/departement.actions';
 import { useDispatch, useSelector } from 'react-redux';
 import "./Département.css";
 import Swal from 'sweetalert2';
 import { DataGrid } from '@mui/x-data-grid';
+import MultiStepForm from './MultiStepForm';
+import EditDeparetementForm from "./EditDepartementForm";
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+import ApartmentOutlinedIcon from '@mui/icons-material/ApartmentOutlined';
+
+
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -67,40 +75,66 @@ function Departement() {
 
 
     const classes = useStyles();
-    const [typedeDepartement, setTypedeDepartement] = useState('');
+    const [nomdeDepartement, setnomdeDepartement] = useState('');
     const [déscription, setDéscription] = useState('');
     const [projet, setProjet] = useState('');
 
     
     const columns = [
-        { field: '_id', headerName: 'ID', width: 70 }, // Utilisez '_id' comme identifiant unique
-        { field: 'typedeDepartement', headerName: 'Type de Département', width: 200 },
-        { field: 'déscription', headerName: 'Déscription', width: 200 },
-        { field: 'projet', headerName: 'Projet', width: 200 },
+        { field: '_id', headerName: 'ID', width: 70 , headerClassName: 'custom-header',}, // Utilisez '_id' comme identifiant unique
+        { field: 'nomdeDepartement', headerName: 'Nom de Département', width: 200, headerClassName: 'custom-header', },
+        { field: 'déscription', headerName: 'Déscription', width: 200 , headerClassName: 'custom-header',},
         {
+            field: 'projet',
+            headerName: 'Projet',
+            width: 200,
+            headerClassName: 'custom-header',
+            renderCell: (params) => (
+              <div style={{ whiteSpace: 'pre-line' }}>
+                {params.row.projet.split('\n').map((project, index) => (
+                  <div key={index}>{project}</div>
+                ))}
+              </div>
+            ),
+          },        {
             field: 'actions',
             headerName: 'Actions',
-            width: 150,
+            width: 470,
+            
+             headerClassName: 'custom-header',
             renderCell: (params) => (
                 <div>
-                    <MuiButton color="primary" onClick={() => handleShowEdit(params.row._id)}> {/* Utilisez '_id' comme identifiant unique */}
-                        <EditOutlinedIcon />
-                    </MuiButton>
+                    <MuiButton color="primary" onClick={() => handleShowEdit(params.row)}> {/* Utilisez params.row pour passer les données du département */}
+    <EditOutlinedIcon />
+</MuiButton>
                     <MuiButton color="secondary" onClick={() => deleteDepartement(params.row._id)}> {/* Utilisez '_id' comme identifiant unique */}
                         <CloseIcon />
                     </MuiButton>
+
+                    <MuiButton color="primary" onClick={() => handleShowDetails(params.row)}>
+          <VisibilityOutlinedIcon />
+        </MuiButton>
                 </div>
             ),
         },
     ];
+     // Convertir les données de l'ancien tableau vers le format requis par le nouveau tableau
+   const rows = departement.map((departement) => ({
+    id:departement._id,
+    nomdeDepartement:departement.nomdeDepartement,
+    déscription:departement.déscription,
+   projet:departement.projet,
+  
+  }));
+
 
     const inputFormElements = [
         { 
-            name: "typedeDepartement",
-            value: typedeDepartement,
-            onChange: (e) => { setTypedeDepartement(e.target.value) },
+            name: "nomdeDepartement",
+            value: nomdeDepartement,
+            onChange: (e) => { setnomdeDepartement(e.target.value) },
             placeholder: "Enter Nom de département",
-            label: "typedeDepartement",
+            label: "nomdeDepartement",
             variant: "outlined",
             fullWidth: true,
             required: true,
@@ -255,24 +289,7 @@ function Departement() {
 
     const [edit, setEdit] = useState(false);
     const handlecloseEdit = () => setEdit(false);
-    const handleShowEdit = (id) => {
-        console.log("ID de département:", id); // Vérifier l'ID du département
     
-        const selectedDepartement = departement.find(dep => dep._id === id);
-        if (selectedDepartement) {
-            setEdit(true); // Ouvrir le dialogue de modification
-            setOpenPopup(false); // Fermer le dialogue d'ajout s'il est ouvert
-            setId(id); // Mettre à jour l'ID du département sélectionné
-            // Remplir le formulaire avec les données du département sélectionné
-            setFormData({
-                typedeDepartement: selectedDepartement.typedeDepartement,
-                déscription: selectedDepartement.déscription,
-                projet: selectedDepartement.projet,
-            });
-        } else {
-            console.error("Département non trouvé pour l'ID:", id);
-        }
-    };
   const handleFormModifeir = async (e) => {
     e.preventDefault();
     console.log("Formulaire de modification soumis !");
@@ -287,11 +304,26 @@ function Departement() {
     setOpenPopup(false); // Fermer le popup après soumission
     handlecloseEdit();
   };
+  const handleShowEdit = (departement) => {
+    // Vérifiez si l'objet departement est valide et contient un champ _id ou id
+    if (departement && (departement._id || departement.id)) {
+        // Utilisez departement._id s'il est disponible, sinon utilisez departement.id
+        const departementId = departement._id || departement.id;
+        console.log("ID de département:", departementId);
+        setOpenEditForm(true); // Ouvrir le formulaire de modification
+        setSelectedDepartement({ ...departement, _id: departementId }); // Assurez-vous que _id est présent dans l'objet
+    } else {
+        console.error("Objet département invalide ou champ _id manquant:", departement);
+        // Afficher éventuellement un message d'erreur à l'utilisateur
+        // alert("Données de département invalides. Veuillez réessayer.");
+    }
+};
 
-//samae
 
 
-
+ 
+  const [openEditForm, setOpenEditForm] = useState(false); // État pour contrôler l'ouverture du formulaire d'édition
+  const [selectedDepartement, setSelectedDepartement] = useState(null); // État pour stocker les données de l'employé sélectionné
     const [recordForEdit, setRecordForEdit] = useState(null);
     const [records, setRecords] = useState(employeeService.getAllEmployees());
     const [filterFn, setFilterFn] = useState({ fn: items => items });
@@ -311,13 +343,13 @@ function Departement() {
         const searchTerm = e.target.value;
         setSearchTerm(searchTerm);
         const filtered = departement.filter(dep =>
-            dep.typedeDepartement.toLowerCase().includes(searchTerm.toLowerCase())
+            dep.nomdeDepartement.toLowerCase().includes(searchTerm.toLowerCase())
         );
         setFilteredDepartement(filtered);
     };
     const filteredDepartements = departement.filter(dep => {
         // Vérifier si dep est défini et si le nom du département correspond au terme de recherche
-        return dep && dep.typedeDepartement && dep.typedeDepartement.toLowerCase().includes(searchTerm.toLowerCase());
+        return dep && dep.nomdeDepartement && dep.nomdeDepartement.toLowerCase().includes(searchTerm.toLowerCase());
     });
 
 
@@ -343,13 +375,54 @@ function Departement() {
         }
     }
 
+
+    const selectDepartement = (departementData) => {
+        setShowDetails(true);
+        setSelectedDepartement(departementData);
+    };
+
+ // Déclarez une fonction pour réinitialiser le département sélectionné
+const resetSelectedDepartement = () => {
+    setShowDetails(false);
+    setSelectedDepartement(null); // Correction ici
+};
+   // Fonction pour afficher les détails de l'employé dans un popup
+const handleShowDetails = (departementData) => {
+    setShowDetails(true);
+    setSelectedDepartement(departementData); // Correction ici
+};
+  // Déclaration de l'état pour contrôler l'affichage du popup et stocker les données de l'employé sélectionné
+  const [showDetails, setShowDetails] = useState(false);
+  
+  const DepartementDetailsPopup = ({ open, handleClose, departement }) => {
+    return (
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>departement Details</DialogTitle>
+        <DialogContent>
+          {/* Vérifier si departement est défini avant d'afficher les détails */}
+          {departement && (
+            <>
+              <div>nomdeDepartement: {departement.nomdeDepartement}</div>
+              <div>déscription: {departement.déscription}</div>
+              <div>projet: {departement.projet}</div>
+              
+              </>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Fermer</Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
+  
+
     return (
         <>
             <PageHeader
                 title="Liste des  Départements"
-                icon={<PeopleOutlineTwoToneIcon fontSize="large" />}
-            />
-            <Paper className={classes.pageContent}>
+             icon={<ApartmentOutlinedIcon fontSize="large" />} />
+                <Paper className={classes.pageContent}>
                 <Toolbar>
                     <Controls.Input
                         label="Recherche Département"
@@ -365,6 +438,14 @@ function Departement() {
                     />
                     <Controls.Button text="Ajouter"  variant="outlined" startIcon={<AddIcon />} className={classes.newButton3} onClick={handleAddNew} />
                 </Toolbar>
+                <MultiStepForm
+            open={openPopup} // Passez l'état pour ouvrir/fermer le formulaire à plusieurs étapes
+            setOpen={setOpenPopup} // Fonction pour modifier l'état d'ouverture/fermeture du formulaire à plusieurs étapes
+          />
+             {/* Affichez la composante MultiStepForm et transmettez les données des départements */}
+             <MultiStepForm departements={departement} />
+
+             
                 {filteredDepartements.length === 0 ? (
                 <Typography variant="body1" style={{ textAlign: 'center', marginTop: '20px' }}>
                     Aucun département trouvé.
@@ -380,89 +461,21 @@ function Departement() {
                     />
                 </div>
             )}
-            </Paper>
-               {/* Popup pour ajouter */}
-            <Dialog open={openPopup} maxWidth="md" classes={{ paper: classes.dialogWrapper }}>
-                <DialogTitle className={classes.dialogTitle}>
-                    <div style={{ display: 'flex' }}>
-                        <Typography variant="h6" component="div" style={{ flexGrow: 1 }}>
-                            Ajouter un Département
-                        </Typography>
-                        <ActionButton color="secondary" onClick={() => setOpenPopup(false)} ><CloseIcon /> </ActionButton>
-                    </div>
-                </DialogTitle>
-                <DialogContent dividers>
-                <form onSubmit={e => { e.preventDefault(); addDeparetement(); }}>
-                        <Grid container>
-                            {inputFormElements.map((item, index) => (
-                                <Grid item xs={item.xs} sm={item.sm} key={index}>
-                                    <Controls.Input
-                                        name={item.name}
-                                        label={item.label}
-                                        placeholder={item.placeholder}
-                                        variant={item.variant}
-                                        fullWidth={item.fullWidth}
-                                        required={item.required}
-                                        value={formData[item.name] || ''}
-                                        onChange={e => setFormData({ ...formData, [item.name]: e.target.value })}
-                                    />
-                                </Grid>
-                            ))}
-                        </Grid>
-                        <div>
-                            <Controls.Button type="submit" text="Submit"  />
-                            <Controls.Button text="Reset" color="default" onClick={() => setFormData({})} />
-                        </div>
-                    </form>
-                </DialogContent>
-            </Dialog>
 
-             {/* Popup pour modifier */}
-      <Dialog open={edit} onClose={handlecloseEdit} maxWidth="md">
-  <DialogTitle>
-    <div style={{ display: "flex" }}>
-      <Typography variant="h6" style={{ flexGrow: 1 }}>
-        Département à Modifier
-      </Typography>
-      <ActionButton color="secondary" onClick={handlecloseEdit}>
-        <CloseIcon />
-      </ActionButton>
-    </div>
-  </DialogTitle>
-  <DialogContent dividers>
-    <form onSubmit={handleFormModifeir}>
-      <Grid container spacing={3}>
-        {inputFormElements.map((item, index) => (
-          <Grid item xs={12} sm={6} key={index}>
-            <Controls.Input
-              label={item.label}
-              name={item.name}
-              value={formData[item.name] || ""}
-              onChange={(e) =>
-                setFormData({ ...formData, [item.name]: e.target.value })
-              }
-              fullWidth
-            />
-          </Grid>
-        ))}
-        <Grid item xs={12}>
-          <div>
-            <Controls.Button type="submit" text="Submit" />
-            <Controls.Button
-              text="Reset"
-              color="default"
-              onClick={() => {
-                setEdit(false); // Fermer le popup de modification
-                handlecloseEdit(); // Fermer le popup
-                setFormData({}); // Réinitialiser les données du formulaire
-              }}
-            />
-          </div>
-        </Grid>
-      </Grid>
-    </form>
-  </DialogContent>
-</Dialog>
+<DepartementDetailsPopup 
+    open={showDetails} 
+    handleClose={resetSelectedDepartement} 
+    departement={selectedDepartement} 
+/>
+            </Paper>
+            {openEditForm && (
+    <EditDeparetementForm
+        open={openEditForm}
+        setOpen={setOpenEditForm}
+        departementData={selectedDepartement} // Passer les données du département sélectionné
+    />
+)}
+            
         </>
     );
 }
